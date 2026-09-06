@@ -406,7 +406,7 @@ struct ShortcutPreferenceRow: View {
         // right question here, and its blindness to a key already switched off
         // is what still lets the switcher's rows record the ids its own
         // take-over toggle is holding.
-        if !role.supportsTakeOver, shortcut.conflictsWithSystemShortcut {
+        if !role.supportsTakeOver, shortcut.conflictsWithSystemShortcut(for: role) {
             errorText = String(format: l10n.s.shortcutConflictFormat, "macOS")
             return
         }
@@ -415,7 +415,7 @@ struct ShortcutPreferenceRow: View {
         switch SystemShortcutTakeoverSupport.recorderDecision(
             shortcut: shortcut,
             conflictsWithMacOS: role.supportsTakeOver
-                && SystemShortcutTakeover.conflictsWithMacOS(shortcut),
+                && SystemShortcutTakeover.conflictsWithMacOS(shortcut, for: role),
             takenOver: SystemShortcutTakeover.isTakenOver(role.storageKey),
             current: GlobalShortcut(storageValue: rawValue)) {
         case .offer:
